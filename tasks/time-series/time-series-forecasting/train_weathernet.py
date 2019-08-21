@@ -22,7 +22,8 @@ import sys
 # Keras and Tensorflow Random Numbers
 seed(1)
 set_random_seed(2)
-now = datetime.datetime.utcnow()
+raw_now = datetime.datetime.utcnow()
+now = raw_now.strftime("%Y-%m-%d__%H-%M-%S.%f")
 
 # Clear
 # Previous Tensorflow Session
