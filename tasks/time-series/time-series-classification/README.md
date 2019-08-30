@@ -4,7 +4,7 @@ Train a Convolutional Neural Network (CNN) on multiple samples of a classified u
 
 ## Data
 
-The current version works with datasets in the format provided by The UCR Time Series Classification Archive of univariate time series datasets.  Please see (https://www.cs.ucr.edu/%7Eeamonn/time_series_data_2018/).
+The current version works with datasets in the format provided by The UCR Time Series Classification Archive of univariate time series datasets.  Please see (https://www.cs.ucr.edu/%7Eeamonn/time_series_data_2018/).<br/>
 The Chlorine Concentration dataset from that archive is included in the data/ folder of this package.  See http://www.cs.cmu.edu/~leili/pubs/leili-thesis.pdf and http://www.timeseriesclassification.com/description.php?Dataset=ChlorineConcentration for information on this dataset.  These references are also in the readme file in the dataset folder.
 
 I recommend downloading the archive and trying out other datasets with this classifier.
@@ -23,7 +23,7 @@ Archive reference from the python source:<br/>
 ## CNN Network
 
 The Convolution Neural Network for this task is built with keras using tensorflow as the backend.
-A CNN was chosen for this task based on the conclusions in the paper "Deep learning for time series classification: a review" by Hassan Ismail Fawaz, Germain Forestier, Jonathan Weber, Lhassane Idoumghar, and Pierre-Alain Muller.  Their paper can be found at https://arxiv.org/pdf/1809.04356.pdf.
+A CNN was chosen for this task based on the conclusions in the paper "Deep learning for time series classification: a review" by Hassan Ismail Fawaz, Germain Forestier, Jonathan Weber, Lhassane Idoumghar, and Pierre-Alain Muller.  Their paper can be found at https://arxiv.org/pdf/1809.04356.pdf.<br/>
 Their conclusion was that the best performing network was a ResNet, but that the CNN performed nearly as well and is much simpler.  I've used here a simplified version of their CNN based on the example for "Sequence classification with 1D convolutions" found in the keras documentation at https://keras.io/getting-started/sequential-model-guide/, but with higher kernal counts based on the numbers used in the CNN portion of the network described in https://devpost.com/software/lstm-fcn.
 
 _________________________________________________________________
@@ -69,7 +69,7 @@ mlflow run . -e train -P <options>
 ```
 Supported options:<br/>
   dataset=\<dataset name\> (default "ChlorineConcentration")<br/>
-  datadir=\<directory of datasets\> (default "data/", and it is assumed that there will be a folder in there called \<dataset name\>)<br/>
+  datadir=\<directory of datasets\> (default "data/", which should contain a folder called \<dataset name\>)<br/>
   format=\<dataset format\> (default and only option is "UCR")<br/>
   loss=\<loss function name\> (default "mse"; "crossentropy" is also supported)<br/>
   optimizer=\<optimizer name\> (default "Adam"; "RMSprop" and "SGD" are also supported)<br/>
@@ -81,7 +81,7 @@ mlflow run . -e classify -P <options>
 ```
 Supported options:<br/>
   dataset=\<dataset name\> (default "ChlorineConcentration")<br/>
-  datadir=\<directory of datasets\> (default "data/", and it is assumed that there will be a folder in there called \<dataset name\>)<br/>
+  datadir=\<directory of datasets\> (default "data/", which should contain a folder called \<dataset name\>)<br/>
   format=\<dataset format\> (default and only option is "UCR")<br/>
   model=\<model file name\> (default "latest" will use the newest .hf5 file in the models/ directory)<br/>
 
