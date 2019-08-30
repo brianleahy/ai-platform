@@ -1,0 +1,22 @@
+name: time-series-classification
+
+conda_env: conda.yaml
+
+entry_points:
+  train:
+    parameters:
+      dataset: {type: string, default: 'ChlorineConcentration'}
+      datadir: {type: string, default: './data'}
+      format: {type: string, default: 'UCR'}
+      loss: {type: string, default: 'mse'}
+      optimizer: {type: string, default: 'Adam'}
+      epochs: {type: float, default: '300'}
+    command: "python Time-Series-Classifier.py --op train --dataset {dataset} --datadir {datadir} --format {format} --loss {loss} --optimizer {optimizer} --epochs {epochs}"
+
+  classify:
+    parameters:
+      dataset: {type: string, default: 'ChlorineConcentration'}
+      datadir: {type: string, default: './data'}
+      format: {type: string, default: 'UCR'}
+      model: {type: string, default: 'latest'}
+    command: "python Time-Series-Classifier.py --op classify --dataset {dataset} --datadir {datadir} --format {format} --model {model}"
