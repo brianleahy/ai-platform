@@ -55,8 +55,8 @@ Ideally the full network including the LSTM portion described in that paper woul
 
 ## Training vs. Test data
 
-When using the "train" option below, the network will be trained on the data contained in the file \<dataset name\>\_TRAIN.tsv.
-When using the "classify" option, the network will classify (predict) on the time-series data in the file \<dataset name\>\_TEST.tsv.
+When using the "train" option below, the network will be trained on the data contained in the file \<dataset name\>\_TRAIN.tsv.<br/>
+When using the "classify" option, the network will classify (predict) on the time-series data in the file \<dataset name\>\_TEST.tsv.<br/>
 To change the division of training and prediction examples, lines can be moved between the files.
 
 ## Usage
@@ -68,22 +68,22 @@ This project uses MLflow and has two entry-points:
 mlflow run . -e train -P <options>
 ```
 Supported options:<br/>
-  dataset=<dataset name> (default "ChlorineConcentration")<br/>
-  datadir=<directory of datasets> (default "data/", and it is assumed that there will be a folder in there called \<dataset name\>)<br/>
-  format=<dataset format> (default and only option is "UCR")<br/>
-  loss=<loss function name> (default "mse"; "crossentropy" is also supported)<br/>
-  optimizer=<optimizer name> (default "Adam"; "RMSprop" and "SGD" are also supported)<br/>
-  epochs=<number of epochs to train> (default 300)<br/>
+  dataset=\<dataset name\> (default "ChlorineConcentration")<br/>
+  datadir=\<directory of datasets\> (default "data/", and it is assumed that there will be a folder in there called \<dataset name\>)<br/>
+  format=\<dataset format\> (default and only option is "UCR")<br/>
+  loss=\<loss function name\> (default "mse"; "crossentropy" is also supported)<br/>
+  optimizer=\<optimizer name\> (default "Adam"; "RMSprop" and "SGD" are also supported)<br/>
+  epochs=\<number of epochs to train\> (default 300)<br/>
 
 ### Classifier prediction (on test data)
 ```bash
 mlflow run . -e classify -P <options>
 ```
 Supported options:<br/>
-  dataset=<dataset name> (default "ChlorineConcentration")<br/>
-  datadir=<directory of datasets> (default "data/", and it is assumed that there will be a folder in there called \<dataset name\>)<br/>
-  format=<dataset format> (default and only option is "UCR")<br/>
-  model=<model file name> (default "latest" will use the newest .hf5 file in the models/ directory)<br/>
+  dataset=\<dataset name\> (default "ChlorineConcentration")<br/>
+  datadir=\<directory of datasets\> (default "data/", and it is assumed that there will be a folder in there called \<dataset name\>)<br/>
+  format=\<dataset format\> (default and only option is "UCR")<br/>
+  model=\<model file name\> (default "latest" will use the newest .hf5 file in the models/ directory)<br/>
 
 ## MLFlow
 
