@@ -15,15 +15,15 @@ import mlflow
 import mlflow.keras
 
 # Acknowledgement for the dataset included in this package:
-@misc{UCRArchive2018,
-    title = {The UCR Time Series Classification Archive},
-    author = {Dau, Hoang Anh and Keogh, Eamonn and Kamgar, Kaveh and Yeh, Chin-Chia Michael and Zhu, Yan
-              and Gharghabi, Shaghayegh and Ratanamahatana, Chotirat Ann and Yanping and Hu, Bing
-              and Begum, Nurjahan and Bagnall, Anthony and Mueen, Abdullah and Batista, Gustavo},
-    year = {2018},
-    month = {October},
-    note = {\url{https://www.cs.ucr.edu/~eamonn/time_series_data_2018/}}
-}
+# @misc{UCRArchive2018,
+#     title = {The UCR Time Series Classification Archive},
+#     author = {Dau, Hoang Anh and Keogh, Eamonn and Kamgar, Kaveh and Yeh, Chin-Chia Michael and Zhu, Yan
+#               and Gharghabi, Shaghayegh and Ratanamahatana, Chotirat Ann and Yanping and Hu, Bing
+#               and Begum, Nurjahan and Bagnall, Anthony and Mueen, Abdullah and Batista, Gustavo},
+#     year = {2018},
+#     month = {October},
+#     note = {\url{https://www.cs.ucr.edu/~eamonn/time_series_data_2018/}}
+# }
 
 # Silence tensorflow warnings and deprecation messages
 #import tensorflow.python.util.deprecation as deprecation
@@ -35,7 +35,7 @@ loss_func_list = ['mse', 'crossentropy']
 optimizer_list = ['Adam', 'RMSprop', 'SGD']
 trainingset_ext = "_TRAIN.tsv"
 testset_ext = "_TEST.tsv"
-model_dir = "models\\"
+model_dir = "models"
 now = datetime.datetime.utcnow()
 raw_now = datetime.datetime.utcnow()
 now = raw_now.strftime("%Y-%m-%d__%H-%M-%S")
@@ -45,7 +45,7 @@ def parse_command_args():
     parser = argparse.ArgumentParser(description='Train or predict time series classes.')
     parser.add_argument('--op', choices = ['train', 'classify'], default='train', help="Operation to perform", type= str)
     parser.add_argument('--dataset', default='ChlorineConcentration', help="Name of dataset to use (ChlorineConcentration)", type=str)
-    parser.add_argument('--datadir', default='./data', help="Dataset directory (/data)", type=str)
+    parser.add_argument('--datadir', default='data', help="Dataset directory (data)", type=str)
     parser.add_argument('--format', choices=['UCR'], default='UCR', help="Dataset files format (UCR)", type= str)
     parser.add_argument('--loss', choices=loss_func_list, default=loss_func_list[0],
             help="Loss function, train only (%s)" % loss_func_list[0], type=str)
@@ -58,8 +58,8 @@ def parse_command_args():
 # Load dataset named base_name that is in the UCR Time Series Classification Archive format
 # see https://www.cs.ucr.edu/%7Eeamonn/time_series_data_2018/
 def load_UCR_dataset(directory, base_name):
-    train_filename = (directory + "\\" + base_name + "\\" + base_name + trainingset_ext)
-    test_filename = (directory + "\\" + base_name + "\\" + base_name + testset_ext)
+    train_filename = os.path.join(directory, base_name, base_name + trainingset_ext)
+    test_filename = os.path.join(directory, base_name, base_name + testset_ext)
     print ("Loading trainind and test data from:\n" + train_filename + "\n" + test_filename)
     train_raw = pd.read_csv(train_filename, sep='\t', header=None)
     test_raw = pd.read_csv(test_filename, sep='\t', header=None)
@@ -114,7 +114,11 @@ def compiled_CNN_model(loss_function, optimizer, train_X, train_y):
 if __name__ == '__main__':
     # Clear old session
     # TODO: Check that --help wasn't used on command line first?
-    K.clear_session()
+    try:
+        K.clear_session()
+    except:
+        # Only tensorflow backend has a clear_session.
+        pass
     # Initialize random seed?
     command_args = parse_command_args()
     train_X, train_y, test_X, test_y, test_y_original = load_UCR_dataset(
@@ -132,7 +136,7 @@ if __name__ == '__main__':
                 os.makedirs(model_dir)
         except OSError:
             print ('Error: Creating directory %s' % model_dir)
-        model_filepath = '%s%s_%s_%d.hf5' % (model_dir, command_args.dataset, now, command_args.epochs)
+        model_filepath = os.path.join(model_dir, '%s_%s_%d.hf5' % (command_args.dataset, now, command_args.epochs))
         CNN_model.save(filepath=model_filepath)
         eval_result = CNN_model.evaluate(test_X, test_y)
         print ("Test result [loss, accuracy]:\n%s" % str(eval_result))
@@ -155,12 +159,13 @@ if __name__ == '__main__':
 
     elif command_args.op == 'classify':
         if command_args.model == 'latest':
-            model_files_list = glob.glob('./models/%s_*.hf5' % command_args.dataset)
+            model_files_list = glob.glob(os.path.join(model_dir, '%s_*.hf5' % command_args.dataset))
             model_filepath = max(model_files_list, key=os.path.getctime)
         else:
-            model_filepath = './models/%s' % command_args.model
+            model_filepath = os.path.join(model_dir, command_args.model)
 
         if os.path.isfile(model_filepath) == True:
+            print("Loading model %s\n" % model_filepath)
             CNN_model = keras.models.load_model(model_filepath)
             print("Model loaded:\n" + str(CNN_model.summary()))
             pred_classes_raw = CNN_model.predict(test_X)

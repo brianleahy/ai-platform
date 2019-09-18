@@ -6,7 +6,7 @@ entry_points:
   train:
     parameters:
       dataset: {type: string, default: 'ChlorineConcentration'}
-      datadir: {type: string, default: './data'}
+      datadir: {type: string, default: 'data'}
       format: {type: string, default: 'UCR'}
       loss: {type: string, default: 'mse'}
       optimizer: {type: string, default: 'Adam'}
@@ -16,7 +16,7 @@ entry_points:
   classify:
     parameters:
       dataset: {type: string, default: 'ChlorineConcentration'}
-      datadir: {type: string, default: './data'}
+      datadir: {type: string, default: 'data'}
       format: {type: string, default: 'UCR'}
       model: {type: string, default: 'latest'}
     command: "python Time-Series-Classifier.py --op classify --dataset {dataset} --datadir {datadir} --format {format} --model {model}"
